@@ -1,5 +1,11 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 import requests
+import pandas as pd
+
+df = pd.read_excel("static/files/worldcities.xlsx")
+
+city_list = df["city_ascii"].dropna().unique().tolist()
 
 def format_timezone(offset_seconds):
     hours = offset_seconds // 3600
@@ -34,3 +40,11 @@ def get_weather(request):
             weather_data = {"error": data.get("message").capitalize()}
 
     return render(request, "app/index.html", {"weather": weather_data})
+
+
+def city_autocomplete(request):
+    term = request.GET.get('term', '').lower()
+
+    matches = [city for city in city_list if term in city.lower()]
+
+    return JsonResponse(matches[:10], safe=False)
