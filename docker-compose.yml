@@ -1,0 +1,11 @@
+services:
+  web:
+    build: .
+    command: ./start.sh
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
