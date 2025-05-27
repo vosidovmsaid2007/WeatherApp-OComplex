@@ -1,0 +1,79 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Weather App</title>
+    <!-- MDB icon -->
+    <link rel="icon" href="img/mdb-favicon.ico" type="image/x-icon" />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+    <!-- Google Fonts Roboto -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}"/>
+    <!-- MDB -->
+    <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.4.0/mdb.min.css" rel="stylesheet"/>
+  </head>
+  <body>
+
+    <section class="vh-100" style="background-color: #f5f6f7;">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                
+                <div class="col-md-10 col-lg-8 col-xl-6">
+                    <h1 class="text-center mb-4 fw-bold">Weather App</h1>
+                    <div class="searchBox">
+                        <form method="POST" action="{% url 'get_weather' %}">
+                            {% csrf_token %}
+                            <input class="searchInput" type="text" name="city_name" placeholder="Type city....">
+                            <button class="searchButton" type="submit">
+                                <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 50 50">
+                                    <path d="M 21 3 C 11.621094 3 4 10.621094 4 20 C 4 29.378906 11.621094 37 21 37 C 24.710938 37 28.140625 35.804688 30.9375 33.78125 L 44.09375 46.90625 L 46.90625 44.09375 L 33.90625 31.0625 C 36.460938 28.085938 38 24.222656 38 20 C 38 10.621094 30.378906 3 21 3 Z M 21 5 C 29.296875 5 36 11.703125 36 20 C 36 28.296875 29.296875 35 21 35 C 12.703125 35 6 28.296875 6 20 C 6 11.703125 12.703125 5 21 5 Z"></path>
+                                </svg>
+                            </button>
+                        </form>
+                    </div>
+                    
+                    <br>
+                    {% if weather.error %}
+                        <div class="alert alert-danger" role="alert">
+                            {{ weather.error }}
+                        </div>
+                    {% endif %}
+                    {% if weather and not weather.error %}
+                        <div class="card bg-dark text-white" style="border-radius: 40px;">
+                            <div class="bg-image" style="border-radius: 35px;">
+                                <img src="http://openweathermap.org/img/wn/{{ weather.icon }}.png"
+                                class="card-img" alt="weather" width="300" height="500"/>
+                                <div class="mask" style="background-color: rgba(190, 216, 232, .5);"></div>
+                            </div>
+                            <div class="card-img-overlay text-dark p-5">
+                                <h4 class="mb-0">{{ weather.location }}, {{weather.country}}, {{ weather.timezone }}</h4>
+                                <p class="display-2 my-3">{{ weather.temperature }}°C</p>
+                                <p class="mb-2">Feels Like: <strong>{{ weather.feels_like }} °C</strong></p>
+                                <p class="mb-2">Humidity: <strong>{{ weather.humidity }} %</strong></p>
+                                <p class="mb-2">Pressure: <strong>{{ weather.pressure }} hPa</strong></p>
+                                <p class="mb-2">Wind Speed: <strong>{{ weather.wind_speed }} m/s</strong></p>
+
+                                <h5>{{ weather.weather }}</h5>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+    <script type="text/javascript" src="{% static 'js/mdb.umd.min.js' %}"></script>
+
+    <script type="text/javascript"></script>
+  </body>
+</html>
